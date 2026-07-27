@@ -1,0 +1,148 @@
+/* Шрифты ПЕРВЫМИ — поздний @import невалиден и оптимизатор его выкинет. */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+/* ── Арт-дирекшн: ночная бургерная ────────────────────────────────────────
+   Их айдентика — чёрная круглая эмблема «BEEF ★ BURGERS» и крафтовые
+   пакеты. Отсюда палитра: near-black, крафт-янтарь, тёплый белый.
+   Тёмная тема здесь не прихоть: главная особенность сети — круглосуточно,
+   и сайт должен выглядеть так же, как их вывеска в три часа ночи.       */
+:root {
+  --bg:      #0d0b0a;
+  --surface: #17130f;
+  --line:    #2b241d;
+  --fg:      #f6f1e8;
+  --muted:   #9b8f80;
+  --kraft:   #d9a441;   /* крафтовая бумага их пакетов */
+  --ember:   #e2541f;   /* угли под решёткой            */
+}
+
+/* ВНИМАНИЕ: не сбрасывать margin через неслоёный `*` — утилиты Tailwind
+   лежат в @layer utilities, и такой сброс молча ломает `mx-auto`.
+   Reset уже делает preflight в @layer base. */
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--ember); color: #fff; }
+
+.display {
+  font-family: "Bebas Neue", sans-serif; font-weight: 400;
+  line-height: .88; letter-spacing: .01em;
+}
+.eyebrow {
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: .3em; font-size: .8rem;
+}
+.tag {
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: .12em;
+}
+
+.kraft { color: var(--kraft); }
+.ember { color: var(--ember); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+}
+
+.btn {
+  font-family: "Bebas Neue", sans-serif; letter-spacing: .14em;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), filter .2s ease, background .2s ease, color .2s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--ember); color: #fff; }
+.btn-ghost   { border: 1.5px solid color-mix(in srgb, var(--fg) 35%, transparent); color: var(--fg); }
+.btn-ghost:hover { background: var(--fg); color: var(--bg); }
+
+/* Круглая эмблема — типографикой по их настоящему названию.
+   Оригинальный логотип должен прийти от самой сети. */
+.emblem {
+  display: grid; place-items: center; border-radius: 999px;
+  border: 2px solid var(--kraft);
+  box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px color-mix(in srgb, var(--kraft) 45%, transparent);
+}
+
+/* Живая точка «работаем сейчас» */
+.pulse { position: relative; }
+.pulse::after {
+  content: ""; position: absolute; inset: -6px; border-radius: 999px;
+  border: 1px solid var(--kraft); opacity: .5;
+  animation: pulse 2.4s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { transform: scale(.85); opacity: .6 }
+  100% { transform: scale(1.5); opacity: 0 }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ── Глава-пролёт «Ночная смена» ──────────────────────────────────────────
+   Токены задаём вне @layer — неслоёные правила выигрывают у дефолтов движка. */
+.sw-host {
+  --sw-bg: #0b0908;
+  --sw-ink: #f6f1e8;
+  --sw-ink-soft: #b3a695;
+  --sw-accent: var(--ember);
+  --sw-font-display: "Bebas Neue", sans-serif;
+  --sw-font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Шапку движка не показываем — у сайта своя, поверх главы. */
+.sw-host .sw-topbar { display: none; }
+
+/* Движок нарисован под светлую тему: primary-кнопка красится в --sw-ink,
+   а лейбл маршрута — тем же --sw-ink по белой плашке. В тёмной главе
+   это «белым по белому». Возвращаем контраст. */
+.sw-host .sw-btn--primary { background: var(--ember); color: #fff; }
+.sw-host .sw-btn--ghost { border-color: color-mix(in srgb, var(--sw-ink) 45%, transparent); }
+.sw-host .sw-route__label { color: #0d0b0a; background: color-mix(in srgb, #fff 92%, transparent); }
+
+/* Текст-колонка по дизайну движка прижата влево. На широких экранах
+   выравниваем её по центрированной колонке, чтобы не улетала в край. */
+.sw-host .sw-copy { left: max(clamp(18px, 5vw, 64px), calc(50vw - 700px)); }
+
+/* Все слои движка — position:fixed. Глава стоит в середине страницы,
+   поэтому гасим её аппарат и до, и после. */
+.sw-host .sw-sky,
+.sw-host .sw-stage,
+.sw-host .sw-copylayer,
+.sw-host .sw-route,
+.sw-host .sw-scrollbar { opacity: var(--sw-exit, 0); }
+
+.sw-host.is-hidden .sw-sky,
+.sw-host.is-hidden .sw-stage,
+.sw-host.is-hidden .sw-copylayer,
+.sw-host.is-hidden .sw-route,
+.sw-host.is-hidden .sw-hint,
+.sw-host.is-hidden .sw-scrollbar { visibility: hidden; }
+
+/* Мобильный монтаж: футажи горизонтальные, экран телефона 0.46 —
+   full-bleed cover выбрасывал бы ~74% ширины кадра. */
+@media (max-width: 860px) {
+  .sw-host .sw-scene { inset: 0 0 auto 0; height: 36vh; }
+  .sw-host .sw-scene__video,
+  .sw-host .sw-scene__still { object-position: center 50%; }
+  .sw-host .sw-copy {
+    top: 38vh; height: 54vh; width: auto; left: 20px; right: 20px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .sw-host .sw-copylayer::before { display: none; }
+  .sw-host .sw-hint { display: none; }
+  .sw-host .sw-sky__glow, .sw-host .sw-particles { display: none; }
+  .sw-host .sw-copy__title { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .sw-host .sw-copy__body { font-size: .95rem; }
+}
+
+/* Шапка фиксированная — якоря должны останавливаться под ней. */
+section[id] { scroll-margin-top: 84px; }

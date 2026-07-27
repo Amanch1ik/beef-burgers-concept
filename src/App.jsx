@@ -42,15 +42,28 @@ function MuteToggle() {
   )
 }
 
-/* ── Эмблема ────────────────────────────────────────────────────────────────
-   Типографическая, набрана по настоящему названию сети. Оригинальный
-   логотип принадлежит им и должен прийти от них — рисовать его копию
-   по мотивам аватарки было бы подделкой. */
-function Emblem({ size = 64 }) {
+/* ── Словесный знак ─────────────────────────────────────────────────────────
+   Настоящая эмблема сети — чёрный круглый бейдж, и повторять её форму было бы
+   подделкой знака, а не заглушкой. Поэтому здесь честный вордмарк: только
+   название, набранное типографикой. Оригинал подставляется в одну строку. */
+function Wordmark({ stacked = false, size = 22 }) {
+  const star = <span className="ember" style={{ fontSize: size * 0.5 }}>★</span>
+  if (!stacked) {
+    return (
+      <span className="display flex items-baseline gap-2" style={{ fontSize: size }}>
+        <span>BEEF</span>{star}<span>BURGERS</span>
+      </span>
+    )
+  }
   return (
-    <span className="emblem shrink-0" style={{ width: size, height: size }} aria-hidden>
-      <span className="display kraft leading-none" style={{ fontSize: size * 0.26 }}>BEEF</span>
-      <span className="ember leading-none" style={{ fontSize: size * 0.2 }}>★</span>
+    <span className="display flex flex-col items-center leading-[0.82]" style={{ fontSize: size }}>
+      <span className="kraft">BEEF</span>
+      <span className="my-1 flex items-center gap-3" style={{ fontSize: size * 0.28 }}>
+        <i className="block h-px w-8" style={{ background: 'var(--line)' }} />
+        {star}
+        <i className="block h-px w-8" style={{ background: 'var(--line)' }} />
+      </span>
+      <span>BURGERS</span>
     </span>
   )
 }
@@ -60,9 +73,8 @@ function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-[120] px-4 py-3 md:px-8 md:py-4">
       <div className="card mx-auto flex w-full max-w-6xl items-center justify-between rounded-full px-4 py-2 md:px-5">
-        <a href="#top" className="flex items-center gap-3">
-          <Emblem size={38} />
-          <span className="display text-xl md:text-2xl">Beef Burgers</span>
+        <a href="#top" className="flex items-center">
+          <Wordmark size={24} />
         </a>
         <nav className="hidden items-center gap-7 text-sm text-[color:var(--muted)] md:flex">
           <a href="#story" onMouseEnter={() => sfx.tick()} className="transition-colors hover:text-[color:var(--fg)]">Ночная смена</a>
@@ -88,9 +100,9 @@ function Hero({ now }) {
       }} />
 
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center text-center">
-        <Emblem size={92} />
+        <Wordmark stacked size={54} />
 
-        <div className="eyebrow kraft mt-6">Бишкек · халал · круглосуточно</div>
+        <div className="eyebrow kraft mt-7">Бишкек · халал · круглосуточно</div>
 
         <h1 className="display mt-4 text-[clamp(3rem,12vw,8rem)]">
           Открыто<br /><span className="ember">прямо сейчас</span>
@@ -258,7 +270,7 @@ function Footer() {
     <footer className="border-t px-5 py-16 md:px-8 md:py-20" style={{ borderColor: 'var(--line)' }}>
       <div className="mx-auto w-full max-w-6xl">
         <div className="flex flex-col items-center gap-6 text-center">
-          <Emblem size={72} />
+          <Wordmark stacked size={44} />
           <h2 className="display text-[clamp(2.4rem,8vw,5rem)]">Голоден в 4 утра?</h2>
           <p className="max-w-md text-sm text-[color:var(--muted)]">
             Мы открыты. Панфилова 54/1, ТЦ DK в 12 микрорайоне, Турусбекова / Фрунзе.
